@@ -9,6 +9,7 @@ COPY . .
 
 # Command to run upon mounting image
 RUN npm i --unsafe-perm --silent
+RUN npm test
 
 # Command to access the bash of the image
 CMD ["/bin/bash"]
