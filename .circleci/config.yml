@@ -11,6 +11,12 @@ jobs:
         environment:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_HOST: 127.0.0.1
+          PORT: 3005
+          DATABASE_NAME: kstart
+          DATABASE_USER: root
+          DATABASE_PASSWORD: password
+          DATABASE_HOST: localhost
+          DEBUG: server:startup,database:startup
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
