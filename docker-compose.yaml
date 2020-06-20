@@ -2,20 +2,20 @@ version: '3.3'
 
 services:
 
-  # Backend API
-  rewards-service:
-    container_name: rewards-api
-    build: ./
-    command: npm start
-    working_dir: /Workspace/fec-capstone/rewards
-    env_file:
-      - ./server/src/config/.env
-    ports:
-      - "3005:3005"
-    environment:
-      DATABASE_HOST: mysql
-      MYSQL_URI: mysql://root:password@mysql:3307/kstart
-      REDIS_URI: redis://redis:6380
+#  # Backend API
+#  rewards-service:
+#    container_name: rewards-api
+#    build: ./
+#    command: npm start
+#    working_dir: /Workspace/fec-capstone/rewards
+#    env_file:
+#      - ./server/src/config/.env
+#    ports:
+#      - "3005:3005"
+#    environment:
+#      DATABASE_HOST: mysql
+#      MYSQL_URI: mysql://root:password@mysql:3307/kstart
+#      REDIS_URI: redis://redis:6380
 
   # MySQL
   mysql:
@@ -27,12 +27,4 @@ services:
       MYSQL_USER: k-user
       MYSQL_PASSWORD: k-pass
     ports:
-      - "3307:3307"
-
-  # Redis
-  redis:
-    image: redis
-    container_name: rewards-redis
-    ports:
-      - "6380:6380"
-
+      - "3306:3306"
