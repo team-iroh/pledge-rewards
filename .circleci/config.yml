@@ -50,15 +50,9 @@ jobs:
             sudo mysql -u root -e "CREATE user myuser IDENTIFIED BY 'password';"
       - run:
           name: Run tests
-      - run:
-          executor:
-            name: node/default
-            steps:
-              - checkout
-              - node/with-cache:
-                  steps:
-                    - run: npm install
-                    - run: npm test
+          command: |
+            npm install
+            npm test
 
 workflows:
   version: 2
