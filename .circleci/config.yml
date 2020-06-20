@@ -1,0 +1,30 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: node:12.6.3
+      - image: mysql:latest
+        environment:
+          MYSQL_USER: mysql
+          MYSQL_PASSWORD: mysql
+          MYSQL_DB: kstart
+    workind_directory: ~/repo
+
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: npm run ci:test
+
