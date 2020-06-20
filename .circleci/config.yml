@@ -1,30 +1,50 @@
-version: 2.1
+version: 2
 jobs:
-  build:
-    docker:
-      - image: node:12.6.3
-      - image: mysql:latest
-        environment:
-          MYSQL_USER: mysql
-          MYSQL_PASSWORD: mysql
-          MYSQL_DB: kstart
-    workind_directory: ~/repo
 
+  build_database:
+    docker:
+      - image: "circleci/node:9.3.0"
+      - image: "mysql:8.0"
+        ports:
+          - "3306:3306"
+        environment:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: circle_test
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
     steps:
       - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
+      - run:
+          name: Install Dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run:
+          name: Wait For Database Connection
+          command: dockerize -wait tcp://$HOST:$PORT -timeout 1m
+          environment:
+            HOST: localhost
+            PORT: 3306
+  build_application:
+    docker:
+      - image: "circleci/node:9.3.0"
+    steps:
+      - checkout
       - run: npm install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
+  test:
+    docker:
+      - image: "circleci/node:9.3.0"
+    steps:
+      - checkout
       - run: npm run ci:test
 
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build_database
+      - build_application
+      - test:
+          requires:
+            - build_database
+            - build_application
