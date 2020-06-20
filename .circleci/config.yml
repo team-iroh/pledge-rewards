@@ -21,7 +21,7 @@ jobs:
             DOCKERIZE_VERSION: v0.3.0
       - run:
           name: Wait for database connection
-          command: dockerize -wait tcp://localhost:5432 -timeout 3m
+          command: dockerize -wait tcp://localhost:3306 -timeout 3m
       - run:
           name: Install MySQL CLI; Import dummy data; run an example query
           command: |
