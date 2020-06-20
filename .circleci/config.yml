@@ -67,7 +67,7 @@ jobs:
 
       - run:
           name: Build Docker Container
-          command: sudo docker-compose up --build
+          command: sudo docker-compose up -d
 
       - save_cache:
           paths:
